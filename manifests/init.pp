@@ -22,14 +22,15 @@ class serverdensity {
 	define config ( $agent_key, $options=[""] ) {
 		exec { "server-density-apt-key":
 			path => "/bin:/usr/bin",
-			command => "wget http://www.serverdensity.com/downloads/boxedice-public.key -O - | apt-key add -",
-			unless => "apt-key list | grep -i boxedice",
+			command => "wget http://www.serverdensity.com/downloads/boxedice-public.key -O - | rpm --import -",
+			unless => "yum repolist | grep -i serverdensity",
 		}
 
-		exec { "server-density-apt-list":
-			path => "/bin:/usr/bin",
-			command => "echo 'deb http://www.serverdensity.com/downloads/linux/debian lenny main' >> /etc/apt/sources.list;apt-get update",
-			unless => "cat /etc/apt/sources.list | grep -i serverdensity",
+		yumrepo { "serverdensity":
+			baseurl => "http://www.serverdensity.com/downloads/linux/redhat/",
+			descr => "The serverdensity repository",
+			enabled => "1",
+			gpgcheck => "1",
 			require => Exec["server-density-apt-key"],
 		}
 
@@ -43,7 +44,7 @@ class serverdensity {
 			mode => "0644",
 			require => Package["sd-agent"],
 		}
-		
+
 		service { "sd-agent":
 			ensure => running,
 			enable => true,
