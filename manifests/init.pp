@@ -36,7 +36,7 @@ class serverdensity {
 
 		package { "sd-agent":
 			ensure => installed,
-			require => Exec["server-density-apt-list"],
+			require => Yumrepo["serverdensity"],
 		}
 
 		file { "/etc/sd-agent/config.cfg":
