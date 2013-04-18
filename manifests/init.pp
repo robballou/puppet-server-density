@@ -22,7 +22,7 @@ class serverdensity {
 	define config ( $agent_key, $options=[""] ) {
 		exec { "server-density-apt-key":
 			path => "/bin:/usr/bin",
-			command => "wget http://www.serverdensity.com/downloads/boxedice-public.key -O - | rpm --import -",
+			command => "wget http://www.serverdensity.com/downloads/boxedice-public.key && rpm --import boxedice-public.key",
 			unless => "yum repolist | grep -i serverdensity",
 		}
 
