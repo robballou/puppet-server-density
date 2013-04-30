@@ -34,6 +34,17 @@ class serverdensity {
 			require => Exec["server-density-apt-key"],
 		}
 
+		package { "python-devel":
+			ensure => installed,
+		}
+
+		if $options['mysql_server'] {
+			package { "MySQL-python":
+				ensure => installed,
+				require => Package['python-devel'],
+			}
+		}
+
 		package { "sd-agent":
 			ensure => installed,
 			require => Yumrepo["serverdensity"],
