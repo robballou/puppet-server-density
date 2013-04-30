@@ -38,6 +38,7 @@ class serverdensity {
 			ensure => installed,
 		}
 
+    # if mysql options are set, include the python package
 		if 'mysql_server' in $options {
 			package { "MySQL-python":
 				ensure => installed,
